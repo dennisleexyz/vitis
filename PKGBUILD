@@ -4,8 +4,8 @@
 # BUILD INSTRUCTIONS:
 #
 # 1. Log in to xilinx.com
-# 2. Go to https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html
-# 3. Download "Xilinx Unified Installer SFD (TAR/GZIP)" - WARNING: This file is >90GB in size
+# 2. Go to https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vitis/archive-vitis.html
+# 3. Download "Xilinx Vitis 2019.2: All OS installer Single-File Download" - WARNING: This file is 34GB in size
 # 4. Place the .tar.gz in the same directory as the PKGBUILD
 # 5. Build!
 #
@@ -13,8 +13,8 @@
 #
 # SOME MORE NOTES:
 #
-# This package is huge. The download alone is a barely-compressed 90GB .tar.gz (extracts to ~90GB)
-# and the final zstd-compressed package is another 20GB. Reserve at least 200GB in total for building.
+# This package is huge. The download alone is a barely-compressed 34GB .tar.gz (extracts to ~34GB)
+# and the final zstd-compressed package is another 27GB. Reserve at least 200GB in total for building.
 #
 # It can also take up to two hours to build, being mostly limited by I/O and single-thread
 # performance. `namcap` takes another 30 minutes, make sure you're not running that automatically.
@@ -26,9 +26,9 @@
 # wrap the `getpwuid()` function and modify the original return value for uid==0.
 
 pkgname=vitis
-_srcname=Xilinx_Unified
-pkgver=2023.1
-_more_ver=0507_1903
+_srcname=Xilinx_Vitis
+pkgver=2019.2
+_more_ver=1106_2127
 pkgrel=2
 pkgdesc="FPGA/CPLD design suite for Xilinx devices"
 url="https://www.xilinx.com/products/design-tools/vitis.html"
@@ -57,7 +57,7 @@ source=("file:///${_srcname}_${pkgver}_${_more_ver}.tar.gz"
         'spoof_homedir.c')
 
 # checksum from https://www.xilinx.com/support/download.html
-md5sums=('f2011ceba52b109e3551c1d3189a8c9c'
+md5sums=('d63bae9cad9bcaa4b2c7f6df9480eaa6'
          '69d14ad64f6ec44e041eaa8ffcb6f87c')
 
 # takes forever for probably minimal gain
@@ -78,8 +78,7 @@ package() {
 	# LD_PRELOAD already contains libfakeroot.so, add our own library before that
 	LD_PRELOAD="$srcdir/spoof_homedir.so:$LD_PRELOAD" ./xsetup \
 		--batch Install \
-		--agree XilinxEULA,3rdPartyEULA \
-		--product Vitis \
+		--agree XilinxEULA,3rdPartyEULA,WebTalkTerms \
 		--edition 'Vitis Unified Software Platform' \
 		--location "$pkgdir/opt/Xilinx"
 
