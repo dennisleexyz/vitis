@@ -94,15 +94,6 @@ package() {
 		install -Dm644 -t "$pkgdir/usr/share/applications/" "$deskfile"
 	done
 
-	# Only remove $pkgdir in the to-be-stored strings, i.e. 2nd, 3rd occurrence,
-	# but leave $pkgdir where needed to find files
-	_relocator=$pkgdir/opt/Xilinx/Vitis/${pkgver}/data/emulation/qemu/comp/qemu/relocate_sdk.sh
-	sed -i -e "/^\\\${PYTHON}/{;s|$pkgdir||2;s|$pkgdir||2;}" "$_relocator"
-	# Run the fixed relocator
-	"$_relocator"
-	# Now remove the remaining traces of $pkgdir
-	sed -i -e "s|$pkgdir||g" "$_relocator"
-	sed -i -e "s|$pkgdir||g" "$pkgdir/opt/Xilinx/Vitis/$pkgver/data/emulation/qemu/comp/qemu/environment-setup-x86_64-petalinux-linux"
 	# clean up artefacts, remove leading $pkgdir from paths
 	rm -rf "$pkgdir/opt/Xilinx/.xinstall/"
 	find "$pkgdir/opt/Xilinx/" -name '*settings64*' -exec sed -i -e "s|$pkgdir||g" '{}' \+
